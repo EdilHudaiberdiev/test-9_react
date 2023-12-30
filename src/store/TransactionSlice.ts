@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ITransaction} from '../types';
-import {addTransaction} from './TransactionThunk';
+import {addTransaction, getTransactions} from './TransactionThunk';
 
 
 
@@ -23,6 +23,41 @@ const TransactionSlice = createSlice({
     },
 
   extraReducers: (builder) => {
+
+
+
+    builder.addCase(getTransactions.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(getTransactions.fulfilled, (state, action ) => {
+      const contactsObject: {[key: string]: ITransaction} = action.payload;
+      const contactArray: ITransaction[] = [];
+
+      if (contactsObject) {
+        for (const [key, value] of Object.entries(contactsObject)) {
+          contactArray.push({
+
+            id: key,
+            title: value.title,
+            transactionSum: value.transactionSum,
+            type: value.type,
+            category: value.category,
+            date: value.date,
+
+          });
+        }
+      }
+
+      state.isLoading = false;
+      state.transactions = contactArray;
+    });
+
+    builder.addCase(getTransactions.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
 
     builder.addCase(addTransaction.pending, (state) => {
       state.isLoading = true;

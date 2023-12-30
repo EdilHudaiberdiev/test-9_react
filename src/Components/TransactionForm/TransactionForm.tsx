@@ -50,7 +50,8 @@ const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmi
             name="transactionSum"
             id="transactionSum"
             className="form-control"
-            value={transaction.transactionSum}
+            value={
+            transaction.transactionSum}
             onChange={e => changeForm(e)}
           />
         </div>
