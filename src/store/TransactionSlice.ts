@@ -44,7 +44,6 @@ const TransactionSlice = createSlice({
           }
 
           transactionArray.push({
-
             id: key,
             title: value.title,
             transactionSum: value.transactionSum,
@@ -55,8 +54,9 @@ const TransactionSlice = createSlice({
           });
         }
       }
+
       state.isLoading = false;
-      state.transactions = transactionArray;
+      state.transactions = transactionArray.reverse();
     });
 
     builder.addCase(getTransactions.rejected, (state) => {

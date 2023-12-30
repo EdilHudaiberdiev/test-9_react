@@ -26,8 +26,8 @@ const Categories = () => {
   useEffect(() => {
     if (categoriesList.length === 0)   dispatch(getCategories());
 
-    if (categoryToEdit) setCategory({...categoryToEdit})
-  }, [dispatch, categoryToEdit])
+    if (categoryToEdit) setCategory({...categoryToEdit});
+  }, [dispatch, categoryToEdit]);
 
 
   const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -62,10 +62,10 @@ const Categories = () => {
     dispatch(getCategories());
   };
 
-    const deleteCategory = async (id: string) => {
-      await dispatch(deleteCategoryById(id));
-      dispatch(getCategories());
-    };
+  const deleteCategory = async (id: string) => {
+    await dispatch(deleteCategoryById(id));
+    dispatch(getCategories());
+  };
 
   return (
       <div className="mt-5 w-75 mx-auto">
@@ -95,47 +95,47 @@ const Categories = () => {
           </CustomModal>
         </div>
 
-      <div className="mt-3">
-        <hr/>
-        {categoriesLoading ? <Spinner/> :
-          <>
-            {categoriesList.length === 0 ? <h4>No categories yet</h4> :
-                <>
-                  {categoriesList.map(categoryItem => (
-                      <div key={categoryItem.id} className="d-flex">
-                        <p>{categoryItem.title} </p>
-                        <p>{categoryItem.type} </p>
-                        <button className="btn  btn-warning" onClick={() => editCategory(categoryItem.id)}>Edit</button>
-                          <button className="btn btn-danger ms-3" onClick={() =>  deleteCategory(categoryItem.id)}>Delete</button>
+        <div className="mt-3">
+          <hr/>
+          {categoriesLoading ? <Spinner/> :
+              <>
+                {categoriesList.length === 0 ? <h4>No categories yet</h4> :
+                    <>
+                      {categoriesList.map(categoryItem => (
+                          <div key={categoryItem.id} className="d-flex mb-2 bprder">
+                            <p>{categoryItem.title} </p>
+                            <p>{categoryItem.type} </p>
+                            <button className="btn  btn-warning ms-2" onClick={() => editCategory(categoryItem.id)}>Edit</button>
+                            <button className="btn btn-danger ms-3" onClick={() =>  deleteCategory(categoryItem.id)}>Delete</button>
 
-                    <CustomModal open={editModalOpen} handleClose={() => setEditModalOpen(false)}>
-                      <form className="p-5 mx-auto" onSubmit={e => onEditSubmit(e,categoryItem.id)}>
-                        <h4>Edit category</h4>
-                        <div className="my-4">
-                          <label htmlFor="title" className="fw-bold me-2">Title:</label>
-                          <input value={category.title} className="form-control" type="text" name="title" id="title" onChange={changeForm}/>
-                        </div>
+                            <CustomModal open={editModalOpen} handleClose={() => setEditModalOpen(false)}>
+                              <form className="p-5 mx-auto" onSubmit={e => onEditSubmit(e,categoryItem.id)}>
+                                <h4>Edit category</h4>
+                                <div className="my-4">
+                                  <label htmlFor="title" className="fw-bold me-2">Title:</label>
+                                  <input value={category.title} className="form-control" type="text" name="title" id="title" onChange={changeForm}/>
+                                </div>
 
-                        <div className="mb-4">
-                          <label htmlFor="type" className="fw-bold me-2">Type:</label>
-                          <select  className="form-control" value={category.type} name="type" id="type" onChange={changeForm}>
-                            <option value="income">Income</option>
-                            <option value="expense">Expense</option>
-                          </select>
-                        </div>
+                                <div className="mb-4">
+                                  <label htmlFor="type" className="fw-bold me-2">Type:</label>
+                                  <select  className="form-control" value={category.type} name="type" id="type" onChange={changeForm}>
+                                    <option value="income">Income</option>
+                                    <option value="expense">Expense</option>
+                                  </select>
+                                </div>
 
-                        <button className="btn btn-primary" type="submit" disabled={category.title.trim().length === 0}>Edit</button>
-                        <button className="btn btn-warning ms-3" type="button" onClick={() => setEditModalOpen(false)}>Cancel</button>
-                      </form>
-                    </CustomModal>
-                  </div>
-                ))}
+                                <button className="btn btn-primary" type="submit" disabled={category.title.trim().length === 0}>Edit</button>
+                                <button className="btn btn-warning ms-3" type="button" onClick={() => setEditModalOpen(false)}>Cancel</button>
+                              </form>
+                            </CustomModal>
+                          </div>
+                      ))}
+                    </>
+                }
               </>
-            }
-          </>
-        }
+          }
+        </div>
       </div>
-    </div>
   );
 };
 
