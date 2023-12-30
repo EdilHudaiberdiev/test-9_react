@@ -20,16 +20,16 @@ interface Props extends PropsWithChildren{
 }
 const CustomModal: React.FC<Props> = ({open=false, handleClose, children}) => {
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        {children}
-      </Box>
-    </Modal>
+      <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {children}
+        </Box>
+      </Modal>
   );
 };
 

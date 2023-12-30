@@ -1,52 +1,73 @@
-import React, {ChangeEvent} from 'react';
-import {ITransaction} from '../../types';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import {AppDispatch, RootState} from '../../app/store';
+import {getCategoriesByType} from '../../store/CategoryThunk';
+import {addTransaction} from '../../store/TransactionThunk';
+import {ITransactionForm} from '../../types';
 
-
-interface Props {
-  transaction: ITransaction,
-  onFormSubmit: (e: React.FormEvent) => void,
-  changeForm:  (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
-}
-
-const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmit}) => {
-
-
-
-  const categories = [
-    {title: 'Food', id: 'food'},
-    {title: 'Salary', id: 'salary'},
-    {title: 'Drinks', id: 'drinks'},
-    {title: 'Other expenses', id: 'other-expenses'},
-  ];
-
+const TransactionForm = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const Navigation = useNavigate();
   const type = [
-    {title: 'Income', id: 'income'},
-    {title: 'Expense', id: 'expense'},
+    {title: 'income', id: 'income'},
+    {title: 'expense', id: 'expense'},
   ];
+  const categories = useSelector((state: RootState) => state.categories.categories);
+  const [transaction, setTransactions] = useState<ITransactionForm>({
+    transactionSum: 0,
+    type: 'income',
+    category: '',
+    date: new Date().toISOString(),
+  });
 
+  useEffect(() => {
+    if (transaction.type !== undefined && transaction.type?.trim().length > 0 ) {
+      dispatch(getCategoriesByType(transaction.type));
+    }
 
+  }, [transaction.type]);
+
+  const onFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const copyTransaction = {...transaction};
+    delete copyTransaction.type;
+
+    try {
+      await dispatch(addTransaction(transaction));
+      Navigation('/');
+    } catch (e) {
+      alert('Something gone wrong');
+    }
+  };
+
+  const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setTransactions((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   return (
-    <>
-      <form onSubmit={e => onFormSubmit(e)}>
-        <h2 className="text-center mb-4">Add transaction</h2>
-        <select name="category" onChange={e => changeForm(e)}>
+      <>
+        <form onSubmit={e => onFormSubmit(e)}>
+          <h2 className="text-center mb-4">Add transaction</h2>
+
+          <div className="mb-3 w-75 mx-auto">
+            <label htmlFor="type" className="form-label">Transaction Sum</label>
+            <select name="type" onChange={e => changeForm(e)}>
+              {type.map(type => (
+                  <option key={type.id} value={type.id}>{type.title}</option>
+              ))}
+            </select>
+          </div>
+
+          <select disabled={categories.length === 0} name="category" value={transaction.category} onChange={e => changeForm(e)}>
+            <option value="" disabled defaultValue={transaction.category}>Select category</option>
           {categories.map(category => (
             <option key={category.id} value={category.id}>{category.title}</option>
           ))}
         </select>
-
-        <div className="mb-3 w-75 mx-auto">
-          <label htmlFor="title" className="form-label">Title</label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            className="form-control"
-            value={transaction.title}
-            onChange={e => changeForm(e)}
-          />
-        </div>
 
         <div className="mb-3 w-75 mx-auto">
           <label htmlFor="transactionSum" className="form-label">Transaction Sum</label>
@@ -61,17 +82,7 @@ const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmi
           />
         </div>
 
-        <select name="type" onChange={e => changeForm(e)}>
-          {type.map(type => (
-            <option key={type.id} value={type.id}>{type.title}</option>
-          ))}
-        </select>
-
-        <h6 className="text-center mb-4">{transaction.date}</h6>
-
         <button type="submit" className="btn btn-primary">Add</button>
-
-
       </form>
     </>
   );

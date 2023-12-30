@@ -7,6 +7,14 @@ export interface ITransaction {
   date: string;
 }
 
+export interface ITransactionForm {
+  transactionSum: number;
+  type?: string;
+  category: string;
+  date: string;
+}
+
+
 export interface  ICategoryForm {
   title: string;
   type: string;

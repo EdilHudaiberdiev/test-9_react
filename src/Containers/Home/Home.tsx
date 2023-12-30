@@ -25,21 +25,21 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <>
-      {isLoading ? <Spinner/> :
-        <>
-          <h4 className="mt-2">Balance {total} KGS</h4>
-
-          {transaction.length === 0 ? <h4>No transactions</h4> :
+      <>
+        {isLoading ? <Spinner/> :
             <>
-              {transaction.map(transaction => (
-                <TransactionCard key={transaction.id} transaction={transaction}/>
-              ))}
+              <h4 className="mt-2">Balance {total} KGS</h4>
+
+              {transaction.length === 0 ? <h4>No transactions</h4> :
+                  <>
+                    {transaction.map(transaction => (
+                        <TransactionCard key={transaction.id} transaction={transaction}/>
+                    ))}
+                  </>
+              }
             </>
-          }
-        </>
-      }
-    </>
+        }
+      </>
   );
 };
 

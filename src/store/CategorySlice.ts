@@ -1,6 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ICategory, ICategoryForm} from '../types';
-import {addCategory, editCategoryById, getCategories, getCategoryById} from './CategoryThunk';
+import {
+  addCategory,
+  deleteCategoryById,
+  editCategoryById,
+  getCategories,
+  getCategoriesByType,
+  getCategoryById
+} from './CategoryThunk';
 
 
 interface TransactionState {
@@ -61,6 +68,32 @@ const CategorySlice = createSlice({
       state.isError = true;
     });
 
+
+    builder.addCase(getCategoriesByType.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(getCategoriesByType.fulfilled, (state, action) => {
+      const categoriesObject: { [key: string]: ICategory } = action.payload;
+      const categoriesArray: ICategory[] = [];
+
+      if (categoriesObject) {
+        for (const [key, value] of Object.entries(categoriesObject)) {
+          categoriesArray.push({
+            id: key,
+            title: value.title,
+            type: value.type,
+          });
+        }
+      }
+      state.isLoading = false;
+      state.categories = categoriesArray;
+    });
+    builder.addCase(getCategoriesByType.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
     builder.addCase(editCategoryById.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
@@ -69,6 +102,18 @@ const CategorySlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(editCategoryById.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
+    builder.addCase(deleteCategoryById.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(deleteCategoryById.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteCategoryById.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
