@@ -32,12 +32,15 @@ const TransactionForm = () => {
     e.preventDefault();
     const copyTransaction = {...transaction};
     delete copyTransaction.type;
-
+    if (transaction.category.trim().length === 0) {
+      confirm('Category must be selected');
+    } else {
     try {
       await dispatch(addTransaction(transaction));
       Navigation('/');
     } catch (e) {
       alert('Something gone wrong');
+      }
     }
   };
 
@@ -82,7 +85,7 @@ const TransactionForm = () => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">Add</button>
+          <button disabled={transaction.category.trim().length === 0} type="submit" className="btn btn-primary">Add</button>
       </form>
     </>
   );

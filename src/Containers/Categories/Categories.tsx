@@ -26,8 +26,8 @@ const Categories = () => {
   useEffect(() => {
     if (categoriesList.length === 0)   dispatch(getCategories());
 
-    if (categoryToEdit) setCategory({...categoryToEdit});
-  }, [dispatch, categoryToEdit]);
+    if (categoryToEdit) setCategory({...categoryToEdit})
+  }, [dispatch, categoryToEdit])
 
 
   const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

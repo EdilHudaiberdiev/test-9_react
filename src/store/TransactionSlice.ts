@@ -6,12 +6,14 @@ import {addTransaction, deleteTransactions, getTransactions} from './Transaction
 
 interface TransactionState {
   transactions: ITransaction[];
+  total: number;
   isLoading: boolean;
   isError: boolean;
 }
 
 const initialState: TransactionState = {
   transactions: [],
+  total: 0,
   isLoading: false,
   isError: false,
 };
@@ -23,9 +25,6 @@ const TransactionSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-
-
-
     builder.addCase(getTransactions.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
@@ -33,9 +32,17 @@ const TransactionSlice = createSlice({
     builder.addCase(getTransactions.fulfilled, (state, action ) => {
       const transactionObject: {[key: string]: ITransaction} = action.payload;
       const transactionArray: ITransaction[] = [];
+      state.total = 0;
 
       if (transactionObject) {
         for (const [key, value] of Object.entries(transactionObject)) {
+
+          if (value.type === 'income') {
+            state.total += +value.transactionSum;
+          } else {
+            state.total -= +value.transactionSum;
+          }
+
           transactionArray.push({
 
             id: key,
@@ -48,7 +55,6 @@ const TransactionSlice = createSlice({
           });
         }
       }
-
       state.isLoading = false;
       state.transactions = transactionArray;
     });

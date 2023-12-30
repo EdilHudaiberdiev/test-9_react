@@ -1,20 +1,22 @@
-import {ITransaction} from '../../types';
 import React from 'react';
-import {deleteTransactions, getTransactions} from '../../store/TransactionThunk';
-import {AppDispatch} from '../../app/store';
-import {useDispatch} from 'react-redux';
+import {ICategory, ITransaction} from '../../types';
+import dayjs from 'dayjs';
 
 
 interface Props {
-  transaction: ITransaction
+  transaction: ITransaction;
+  categories: ICategory[],
+  deleteTransactionsById: (id: string) => void;
 }
 
-const TransactionCard: React.FC<Props> = ({transaction}) => {
-  const dispatch: AppDispatch = useDispatch();
-  const deleteTransactionsById = async (id: string) => {
-    await dispatch(deleteTransactions(id));
-    dispatch(getTransactions());
-  };
+const TransactionCard: React.FC<Props> = ({categories, transaction, deleteTransactionsById }) => {
+  let categoryFromTransaction: string = transaction.category;
+
+  categories.map(category => {
+    if (category.id === categoryFromTransaction) {
+      categoryFromTransaction = category.title;
+    }
+  });
 
   return (
     <>
@@ -25,9 +27,9 @@ const TransactionCard: React.FC<Props> = ({transaction}) => {
             <p className="text-success"><b>+{transaction.transactionSum}</b></p> :
             <p className="text-danger"><b>-{transaction.transactionSum}</b></p>
           }</p>
-          <p className="card-text"><b>Category</b> {transaction.category}</p>
+          <p className="card-text"><b>Category</b> {categoryFromTransaction}</p>
           <p className="card-text"><b>Type</b> {transaction.type}</p>
-          <p className="card-text"><b>Date</b> {transaction.date}</p>
+          <p className="card-text"><b>Date</b> {dayjs(transaction.date).format('DD.MM.YYYY HH:mm:ss')}</p>
         </div>
 
         <button
