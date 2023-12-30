@@ -77,7 +77,7 @@ const Categories = () => {
             <form className="p-5 mx-auto" onSubmit={onSubmit}>
               <h4>Add category</h4>
               <div className="my-4">
-                <label htmlFor="title" className="fw-bold me-2">Title:</label>
+                <label htmlFor="title" className="fw-bold me-1">Title:</label>
                 <input className="form-control" type="text" name="title" id="title" onChange={changeForm}/>
               </div>
 
@@ -89,8 +89,8 @@ const Categories = () => {
                 </select>
               </div>
 
-              <button className="btn btn-primary" type="submit" disabled={category.title.trim().length === 0}>Add</button>
-              <button className="btn btn-warning ms-3" type="button" onClick={() => setModalOpen(false)}>Cancel</button>
+              <button className="btn btn-primary me-1 mb-2" type="submit" disabled={category.title.trim().length === 0}>Add</button>
+              <button className="btn btn-warning" type="button" onClick={() => setModalOpen(false)}>Cancel</button>
             </form>
           </CustomModal>
         </div>
@@ -102,8 +102,8 @@ const Categories = () => {
                 {categoriesList.length === 0 ? <h4>No categories yet</h4> :
                     <>
                       {categoriesList.map(categoryItem => (
-                          <div key={categoryItem.id} className="d-flex mb-2 bprder">
-                            <p>{categoryItem.title} </p>
+                          <div key={categoryItem.id} className="d-flex mb-2 border p-2">
+                            <p>{categoryItem.title} </p> &nbsp;
                             <p>{categoryItem.type} </p>
                             <button className="btn  btn-warning ms-2" onClick={() => editCategory(categoryItem.id)}>Edit</button>
                             <button className="btn btn-danger ms-3" onClick={() =>  deleteCategory(categoryItem.id)}>Delete</button>

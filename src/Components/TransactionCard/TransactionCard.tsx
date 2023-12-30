@@ -60,7 +60,7 @@ const TransactionCard: React.FC<Props> = ({categories, transaction, deleteTransa
 
   return (
       <>
-        <div className="card w-25 mx-auto p-4 mb-3">
+        <div className="card w-50 mx-auto p-4 mb-3">
           <div className="card-body">
             <h5 className="card-title">{transaction.title}</h5>
             <p className="card-text">   {transaction.type === 'income' ?
