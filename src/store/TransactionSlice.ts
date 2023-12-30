@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ITransaction} from '../types';
-import {addTransaction, getTransactions} from './TransactionThunk';
+import {addTransaction, deleteTransactions, getTransactions} from './TransactionThunk';
 
 
 
@@ -20,7 +20,7 @@ const TransactionSlice = createSlice({
   name: 'Transaction',
   initialState,
   reducers: {
-    },
+  },
 
   extraReducers: (builder) => {
 
@@ -31,12 +31,12 @@ const TransactionSlice = createSlice({
       state.isError = false;
     });
     builder.addCase(getTransactions.fulfilled, (state, action ) => {
-      const contactsObject: {[key: string]: ITransaction} = action.payload;
-      const contactArray: ITransaction[] = [];
+      const transactionObject: {[key: string]: ITransaction} = action.payload;
+      const transactionArray: ITransaction[] = [];
 
-      if (contactsObject) {
-        for (const [key, value] of Object.entries(contactsObject)) {
-          contactArray.push({
+      if (transactionObject) {
+        for (const [key, value] of Object.entries(transactionObject)) {
+          transactionArray.push({
 
             id: key,
             title: value.title,
@@ -50,7 +50,7 @@ const TransactionSlice = createSlice({
       }
 
       state.isLoading = false;
-      state.transactions = contactArray;
+      state.transactions = transactionArray;
     });
 
     builder.addCase(getTransactions.rejected, (state) => {
@@ -71,11 +71,19 @@ const TransactionSlice = createSlice({
       state.isError = true;
     });
 
+    builder.addCase(deleteTransactions.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(deleteTransactions.fulfilled, (state ) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteTransactions.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
   }
-
-
-
-
 });
 
 export const TransactionReducer = TransactionSlice.reducer;

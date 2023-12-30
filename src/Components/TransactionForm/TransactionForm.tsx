@@ -1,6 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import {ITransaction} from '../../types';
 
+
 interface Props {
   transaction: ITransaction,
   onFormSubmit: (e: React.FormEvent) => void,
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmit}) => {
+
+
 
   const categories = [
     {title: 'Food', id: 'food'},
@@ -20,6 +23,8 @@ const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmi
     {title: 'Income', id: 'income'},
     {title: 'Expense', id: 'expense'},
   ];
+
+
 
   return (
     <>
@@ -51,7 +56,7 @@ const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmi
             id="transactionSum"
             className="form-control"
             value={
-            transaction.transactionSum}
+              transaction.transactionSum}
             onChange={e => changeForm(e)}
           />
         </div>
@@ -65,6 +70,8 @@ const TransactionForm: React.FC <Props> = ({transaction, changeForm, onFormSubmi
         <h6 className="text-center mb-4">{transaction.date}</h6>
 
         <button type="submit" className="btn btn-primary">Add</button>
+
+
       </form>
     </>
   );

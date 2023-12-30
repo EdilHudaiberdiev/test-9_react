@@ -1,6 +1,8 @@
-// import {useDispatch, useSelector} from 'react-redux';
-// import {AppDispatch, RootState} from '../../app/store';
 import {ITransaction} from '../../types';
+import React from 'react';
+import {deleteTransactions, getTransactions} from '../../store/TransactionThunk';
+import {AppDispatch} from '../../app/store';
+import {useDispatch} from 'react-redux';
 
 
 interface Props {
@@ -8,12 +10,15 @@ interface Props {
 }
 
 const TransactionCard: React.FC<Props> = ({transaction}) => {
+  const dispatch: AppDispatch = useDispatch();
+  const deleteTransactionsById = async (id: string) => {
+    await dispatch(deleteTransactions(id));
+    dispatch(getTransactions());
+  };
 
-  // const isLoading = useSelector((state: RootState) => state.transactions.isLoading);
-  // const dispatch: AppDispatch = useDispatch();
   return (
     <>
-      <div className="card w-100">
+      <div className="card w-25 mx-auto p-4 mb-3">
         <div className="card-body">
           <h5 className="card-title">{transaction.title}</h5>
           <p className="card-text">   {transaction.type === 'income' ?
@@ -24,6 +29,12 @@ const TransactionCard: React.FC<Props> = ({transaction}) => {
           <p className="card-text"><b>Type</b> {transaction.type}</p>
           <p className="card-text"><b>Date</b> {transaction.date}</p>
         </div>
+
+        <button
+          onClick={() => deleteTransactionsById(transaction.id)}
+          type="button"
+          className="ms-3 btn btn-danger"
+        >Delete</button>
       </div>
     </>
   );

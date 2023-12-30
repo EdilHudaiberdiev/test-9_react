@@ -11,8 +11,14 @@ const Home = () => {
   const isLoading = useSelector((state: RootState) => state.transactions.isLoading);
   const dispatch: AppDispatch = useDispatch();
 
-  // let totalSum = 0;
-
+  let total = 0;
+  transaction.forEach(item => {
+    if (item.type === 'income') {
+      total += +item.transactionSum;
+    } else {
+      total -= +item.transactionSum;
+    }
+  });
 
   useEffect(() => {
     dispatch(getTransactions());
@@ -22,10 +28,9 @@ const Home = () => {
     <>
       {isLoading ? <Spinner/> :
         <>
-          <h6>Total:
-            {}
-          </h6>
-          {transaction.length === 0 ? <h4>No contacts</h4> :
+          <h4 className="mt-2">Balance {total} KGS</h4>
+
+          {transaction.length === 0 ? <h4>No transactions</h4> :
             <>
               {transaction.map(transaction => (
                 <TransactionCard key={transaction.id} transaction={transaction}/>

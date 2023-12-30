@@ -14,3 +14,10 @@ export const addTransaction = createAsyncThunk(
   async (transactions: ITransaction) => {
     await axiosApi.post(`transaction.json`, transactions);
   });
+
+export const deleteTransactions = createAsyncThunk(
+    'transaction/delete',
+    async (id: string) => {
+        await axiosApi.delete(`transaction/${id}.json`);
+    });
+
